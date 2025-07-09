@@ -6,11 +6,11 @@ import { catchError, map, Observable, of, tap } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private url = 'http://localhost:3333';
+  private baseUrl = 'http://localhost:3333';
   constructor(private http: HttpClient) { }
 
   login(email: string, password: string): Observable<any> {
-    return this.http.post<any>(`${this.url}/login`, { email, password }).pipe(
+    return this.http.post<any>(`${this.baseUrl}/login`, { email, password }).pipe(
       tap(res =>{
         localStorage.setItem('token', res.token);
       })
@@ -18,7 +18,7 @@ export class AuthService {
   }
 
   register(fullName: string, email: string, password: string): Observable<any> {
-    return this.http.post<any>(`${this.url}/register`, { fullName, email, password }).pipe(
+    return this.http.post<any>(`${this.baseUrl}/register`, { fullName, email, password }).pipe(
       tap(res =>{
         localStorage.setItem('token', res.token);
       })
@@ -26,16 +26,20 @@ export class AuthService {
   }
 
   validateToken(): Observable<boolean> {
-    return this.http.get<{ valid: boolean }>(`${this.url}/auth/validate`).pipe(
+    return this.http.get<{ valid: boolean }>(`${this.baseUrl}/auth/validate`).pipe(
       map(() => true),
       catchError(() => of(false))
     );
   }
-  
+
   logout(): Observable<any> {
-    return this.http.post<any>(`${this.url}/logout`, {}).pipe(
+    return this.http.post<any>(`${this.baseUrl}/logout`, {}).pipe(
       tap(() => localStorage.removeItem('token'))
     );
+  }
+
+  validateSession() {
+    return this.http.get<{ valid: boolean; user: any }>(`${this.baseUrl}/auth/validate`);
   }
 
 }

@@ -1,1 +1,28 @@
-<p>game-card works!</p>
+<div class="w-full border border-gray-300 rounded-lg p-4 shadow hover:shadow-lg transition flex flex-col sm:flex-row justify-between items-start sm:items-center">
+  <div>
+    <h4 class="text-xl font-semibold text-gray-400">Game #{{ game.id }}</h4>
+    <p class="text-sm text-gray-400">Created by: {{ game.boards?.[0]?.user?.fullName || 'Unknown' }}</p>
+    <p class="text-sm text-gray-400 font-semibold mt-1">
+      Status: <span [ngClass]="statusColor">{{ statusText }}</span>
+    </p>
+  </div>
+
+  <div class="flex gap-2 mt-2 sm:mt-0">
+    <button
+        (click)="joinGame()"
+        title="Join"
+        class="px-4 py-2 bg-blue-500 text-white rounded flex items-center gap-2"
+        >
+        Join
+    </button>
+
+    <button
+      *ngIf="isCreator && game.status === 'waiting'"
+      (click)="cancelGame()"
+      title="Cancel"
+      class="px-4 py-2 bg-red-500 text-white rounded flex items-center gap-2"
+    >
+      Cancel
+    </button>
+  </div>
+</div>

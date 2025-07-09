@@ -1,1 +1,26 @@
-<p>dashboard works!</p>
+<div class="dashboard-header">
+  <h2 class="text-xl font-bold text-white">Welcome</h2>
+
+  <button (click)="createGame()" class="glass-button text-white">
+    {{ loading ? 'Creating...' : 'Create Game' }}
+  </button>
+
+  <p *ngIf="error" class="text-red-500 mt-2">{{ error }}</p>
+</div>
+
+<div class="games-section">
+    <h3 class="text-2xl font-bold text-white mb-6 text-center">
+        Available Rooms
+    </h3>
+
+    <div *ngIf="games.length === 0">No games available</div>
+    <div *ngIf="games.length > 0 && currentUserId !== null">
+        <app-game-card
+            *ngFor="let game of games"
+            [game]="game"
+            [currentUserId]="currentUserId"
+            (join)="joinGame($event)"
+            (refresh)="fetchGames()"
+        ></app-game-card>
+    </div>
+</div>
