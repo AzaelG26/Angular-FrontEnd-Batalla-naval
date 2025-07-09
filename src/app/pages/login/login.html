@@ -1,0 +1,83 @@
+<main
+  class="min-h-screen w-full relative flex items-center justify-center px-4"
+  [ngStyle]="crimsonBackgroundStyle"
+>
+  <div class="absolute inset-0 bg-black/60 backdrop-blur-md z-0"></div>
+
+  <section
+    class="relative z-10 w-full max-w-md bg-white/5 backdrop-blur-xl rounded-xl shadow-2xl p-10"
+  >
+    <h2
+      class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-600 to-red-800 text-center mb-4 drop-shadow"
+    >
+      Welcome Back, Commander
+    </h2>
+    <p class="text-sm text-center text-gray-300 mb-8">
+      Sign in to deploy your fleet
+    </p>
+
+    <!-- Formulario -->
+    <form [formGroup]="form" (ngSubmit)="onLogin()" class="space-y-5">
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-300 mb-1"
+          >Email</label
+        >
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="email@example.com"
+          class="w-full px-4 py-2.5 rounded-md bg-black/30 border border-white/10 text-white placeholder-gray-400 focus:ring-2 focus:ring-red-500 focus:outline-none transition shadow-sm"
+        />
+        <p *ngIf="email?.touched && email?.invalid" class="mt-1 text-xs text-red-500">
+          <ng-container *ngIf="email?.hasError('required')">Email is required.</ng-container>
+          <ng-container *ngIf="email?.hasError('email')">Invalid email format.</ng-container>
+          <ng-container *ngIf="email?.hasError('custom')">{{ email?.errors?.['custom'] }}</ng-container>
+        </p>
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-300 mb-1"
+          >Password</label
+        >
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="••••••••"
+          class="w-full px-4 py-2.5 rounded-md bg-black/30 border border-white/10 text-white placeholder-gray-400 focus:ring-2 focus:ring-red-500 focus:outline-none transition shadow-sm"
+        />
+        <p *ngIf="password?.touched && password?.invalid" class="mt-1 text-xs text-red-500">
+          <ng-container *ngIf="password?.hasError('required')">Password is required.</ng-container>
+          <ng-container *ngIf="password?.hasError('minlength')">Minimum 8 characters.</ng-container>
+          <ng-container *ngIf="password?.hasError('custom')">{{ password?.errors?.['custom'] }}</ng-container>
+        </p>
+      </div>
+
+      <!-- Error general -->
+      <p *ngIf="form.hasError('credentials')" class="text-sm text-center text-red-500">
+        {{ form.errors?.['credentials'] }}
+      </p>
+
+      <!-- Botón -->
+      <button
+        type="submit"
+        class="w-full py-2.5 font-semibold text-white bg-gradient-to-r from-red-600 via-red-700 to-red-800 rounded-md shadow-md hover:brightness-110 transition"
+      >
+        Sign In
+      </button>
+
+      <!-- Enlace a registro -->
+      <p class="text-sm text-center text-gray-400 mt-4">
+        Don’t have an account?
+        <a
+          routerLink="/register"
+          class="text-red-400 hover:text-red-500 font-medium underline"
+          >Register</a
+        >
+      </p>
+    </form>
+  </section>
+</main>

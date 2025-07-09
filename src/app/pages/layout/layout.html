@@ -1,0 +1,78 @@
+<div class="flex min-h-screen bg-gradient-to-br from-black via-gray-900 to-red-950 text-white font-sans">
+  <!-- Sidebar -->
+  <aside
+    class="fixed top-0 left-0 h-full w-64 bg-white/8 backdrop-blur-xl shadow-lg transition-transform duration-300 z-20"
+    [ngClass]="{ '-translate-x-full': !sidebarOpen, 'translate-x-0': sidebarOpen }"
+  >
+    <div class="pl-1 pt-5 pr-2">
+      <h2 class="text-2xl font-bold bg-gradient-to-r from-red-500 via-red-600 to-red-700 bg-clip-text text-transparent mb-10">
+        🛳️ Fleet Control
+      </h2>
+      <nav class="space-y-4">
+        <a
+          routerLink="/lobby"
+          routerLinkActive="text-red-400"
+          class="flex items-center h-12 gap-2 px-3 py-2 hover:bg-red-700/30 transition"
+        >
+          <span>Lobby</span>
+        </a>
+        <a
+          routerLink="/profile"
+          routerLinkActive="text-red-400"
+          class="flex items-center h-12 gap-2 px-3 py-2 hover:bg-red-700/30 transition"
+        >
+          <span>Profile</span>
+        </a>
+        <a
+          routerLink="/settings"
+          routerLinkActive="text-red-400"
+          class="flex items-center h-12 gap-2 px-3 py-2 hover:bg-red-700/30 transition"
+        >
+          <span>Settings</span>
+        </a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- Overlay for small screens -->
+  <div
+    class="fixed inset-0 bg-black/60 z-10 md:hidden"
+    *ngIf="sidebarOpen"
+    (click)="toggleSidebar()"
+  ></div>
+
+  <!-- Content area -->
+  <div class="flex-1 ml-0 md:ml-64 transition-all duration-300 w-full">
+    <!-- Top navbar -->
+    <header
+      class="flex items-center justify-between px-6 py-4 bg-white/8 backdrop-blur-lg shadow-md"
+    >
+      <!-- Hamburger button (mobile only) -->
+      <button
+        class="text-white hover:text-red-400 md:hidden"
+        (click)="toggleSidebar()"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+
+      <h1 class="text-xl font-semibold bg-gradient-to-r from-red-500 to-red-700 bg-clip-text text-transparent">
+        Command Panel
+      </h1>
+
+      <!-- Opcional: botón de logout o user avatar -->
+      <div class="hidden md:block">
+        <button class="px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 text-white text-sm font-medium transition">
+          Logout
+        </button>
+      </div>
+    </header>
+
+    <!-- Routed views -->
+    <main class="p-6">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

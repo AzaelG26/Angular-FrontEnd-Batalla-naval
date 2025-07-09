@@ -1,0 +1,4 @@
+/* layout.css */
+:host {
+  display: block;
+}
