@@ -1,28 +1,37 @@
-<div class="px-4 py-8 max-w-7xl mx-auto text-white">
-  <h2 class="text-2xl font-bold mb-2">Game #{{ gameData?.id }}</h2>
-
-  <div class="text-center text-lg mb-4">
-    <span [ngClass]="isMyTurn ? 'text-green-400' : 'text-red-400'">
-      {{ isMyTurn ? "It's your turn" : "Not your turn" }}
-    </span>
+<div class="px-4 py-10 max-w-7xl mx-auto text-white space-y-10">
+  <!-- Encabezado -->
+  <div class="text-center">
+    <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-800 drop-shadow mb-2">
+      Game #{{ gameData?.id }}
+    </h2>
+    <div class="text-lg">
+      <span [ngClass]="isMyTurn ? 'text-green-400' : 'text-red-400'">
+        {{ isMyTurn ? "It's your turn" : "Not your turn" }}
+      </span>
+    </div>
   </div>
 
-  <div *ngIf="error" class="text-red-500 text-sm text-center mb-4">{{ error }}</div>
+  <!-- Error -->
+  <div *ngIf="error" class="text-center text-red-400 text-sm">
+    {{ error }}
+  </div>
 
+  <!-- Tableros -->
   <div class="grid md:grid-cols-2 gap-8">
-    <!-- Your board -->
+    <!-- Tu tablero -->
     <div>
-      <h3 class="text-lg font-semibold mb-4">Your board</h3>
-      <div class="overflow-x-auto">
-        <div class="grid grid-cols-[40px_repeat(8,40px)]">
+      <h3 class="text-xl font-semibold text-red-400 mb-4">Your Board</h3>
+      <div class="overflow-x-auto rounded-lg bg-white/5 backdrop-blur-md p-3 shadow-lg border border-white/10">
+        <div class="grid grid-cols-[40px_repeat(8,40px)] gap-px">
           <div></div>
-          <div *ngFor="let col of cols" class="text-center font-bold">{{ col }}</div>
+          <div *ngFor="let col of cols" class="text-center text-sm font-bold text-white/70">{{ col }}</div>
+
           <ng-container *ngFor="let row of rows">
-            <div class="text-center font-bold">{{ row }}</div>
+            <div class="text-center text-sm font-bold text-white/70">{{ row }}</div>
             <div *ngFor="let col of cols"
-                 class="w-10 h-10 border border-gray-500 flex items-center justify-center transition"
+                 class="w-10 h-10 border border-gray-700 flex items-center justify-center"
                  [ngClass]="{
-                   'bg-red-500 text-white': myHitsReceived.includes(row + col),
+                   'bg-red-600 text-white': myHitsReceived.includes(row + col),
                    'bg-white text-black': !myHitsReceived.includes(row + col)
                  }">
               <span *ngIf="myGrid.includes(row + col)">🚢</span>
@@ -33,26 +42,27 @@
       </div>
     </div>
 
-    <!-- Opponent's board -->
+    <!-- Tablero del oponente -->
     <div>
-      <h3 class="text-lg font-semibold mb-4">Opponent's board</h3>
-      <div class="overflow-x-auto">
-        <div class="grid grid-cols-[40px_repeat(8,40px)]">
+      <h3 class="text-xl font-semibold text-red-400 mb-4">Opponent's Board</h3>
+      <div class="overflow-x-auto rounded-lg bg-white/5 backdrop-blur-md p-3 shadow-lg border border-white/10">
+        <div class="grid grid-cols-[40px_repeat(8,40px)] gap-px">
           <div></div>
-          <div *ngFor="let col of cols" class="text-center font-bold">{{ col }}</div>
+          <div *ngFor="let col of cols" class="text-center text-sm font-bold text-white/70">{{ col }}</div>
+
           <ng-container *ngFor="let row of rows">
-            <div class="text-center font-bold">{{ row }}</div>
+            <div class="text-center text-sm font-bold text-white/70">{{ row }}</div>
             <div *ngFor="let col of cols"
-                 class="w-10 h-10 border border-gray-600 flex items-center justify-center cursor-pointer transition"
+                 class="w-10 h-10 border border-gray-700 flex items-center justify-center cursor-pointer transition-all"
                  [ngClass]="{
-                   'bg-red-500': getMoveResult(row, col) === 'hit',
-                   'bg-blue-300': getMoveResult(row, col) === 'miss',
-                   'bg-gray-800 hover:bg-gray-700': getMoveResult(row, col) === null
+                   'bg-red-600 text-white': getMoveResult(row, col) === 'hit',
+                   'bg-blue-500/30 text-white': getMoveResult(row, col) === 'miss',
+                   'bg-black/40 hover:bg-red-500/30': getMoveResult(row, col) === null
                  }"
                  (click)="shootAt(row, col)">
               <ng-container [ngSwitch]="getMoveResult(row, col)">
-                <span *ngSwitchCase="'hit'" class="text-white text-xl">🔥</span>
-                <span *ngSwitchCase="'miss'" class="text-white text-xl">💦</span>
+                <span *ngSwitchCase="'hit'" class="text-xl">🔥</span>
+                <span *ngSwitchCase="'miss'" class="text-xl">💦</span>
               </ng-container>
             </div>
           </ng-container>
@@ -61,11 +71,14 @@
     </div>
   </div>
 
-  <div class="text-center mt-8">
+  <!-- Botón para salir -->
+  <div class="text-center">
     <button
       (click)="leaveGame()"
-      class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-5 rounded-full shadow transition duration-300"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+           viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-10V5m-6 6h.01" />
       </svg>
@@ -73,13 +86,17 @@
     </button>
   </div>
 
-  <div class="max-w-4xl mx-auto mt-8">
-    <h3 class="text-lg font-semibold mb-2">Movements</h3>
-    <ul class="list-disc list-inside text-white">
+  <!-- Movimientos -->
+  <div class="max-w-3xl mx-auto bg-white/5 backdrop-blur-md p-6 rounded-lg border border-white/10 shadow">
+    <h3 class="text-lg font-semibold text-red-400 mb-3">Movements</h3>
+    <ul class="list-disc list-inside text-sm text-gray-200 space-y-1">
       <li *ngFor="let move of gameData?.moves">
-        {{ move.user.name }} → {{ move.position }} — {{ move.result === 'hit' ? '¡Tocado!' : 'Agua' }}
+        {{ move.user.name }} → <span class="font-mono">{{ move.position }}</span> —
+        <span [ngClass]="move.result === 'hit' ? 'text-red-400' : 'text-blue-400'">
+          {{ move.result === 'hit' ? '¡Tocado!' : 'Agua' }}
+        </span>
       </li>
-      <li *ngIf="gameData?.moves?.length === 0" class="text-gray-400">
+      <li *ngIf="gameData?.moves?.length === 0" class="text-gray-400 italic">
         No moves yet.
       </li>
     </ul>

@@ -39,7 +39,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
         this.polling = setInterval(() => this.fetchGame(gameId), 2000);
       },
       error: () => {
-        this.error = 'Sesión no válida';
+        this.error = 'Invalid session';
         this.redirecting = true;
         this.router.navigate(['/login']);
       }
@@ -69,7 +69,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
       (m: any) => m.userId === this.userId && m.x === x && m.y === y
     );
     if (alreadyShot) {
-      this.error = 'Ya disparaste en esta celda.';
+      this.error = 'You already shot this cell.';
       return;
     }
 
@@ -78,7 +78,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
     this.gameService.shoot(this.gameData.id, { x, y }).subscribe({
       next: () => this.fetchGame(this.gameData.id),
       error: err => {
-        this.error = err.error?.error || 'Error al disparar.';
+        this.error = err.error?.error || 'Error while shooting.';
         this.processingMove = false;
       },
       complete: () => (this.processingMove = false)
@@ -117,7 +117,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
           Swal.fire({
             icon: 'warning',
             title: '🔥 You were hit',
-            text: `¡They hit you at cell ${newHit}!`,
+            text: `You were hit at cell ${newHit}!`,
             confirmButtonText: 'Accept',
             background: '#0b0e23',
             color: '#fff',
@@ -136,7 +136,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
           const won = newGame.winner_id === meId;
           Swal.fire({
             icon: won ? 'success' : 'error',
-            title: won ? '🏆 ¡You won!' : '💀 Has perdido',
+            title: won ? '🏆 You won!' : '💀 You lost',
             text: won ? 'All opponent ships have been destroyed.' : 'Your ships have been destroyed.',
             confirmButtonText: 'Accept',
             background: '#0b0e23',
@@ -159,7 +159,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
       showCancelButton: true,
       confirmButtonColor: '#e74c3c',
       cancelButtonColor: '#3498db',
-      confirmButtonText: 'yes, leave it',
+      confirmButtonText: 'Yes, leave it',
       cancelButtonText: 'Cancel',
       background: '#0b0e23',
       color: '#fff'
@@ -168,10 +168,10 @@ export class GameViewComponent implements OnInit, OnDestroy {
         this.gameService.leaveGame(this.gameData.id).subscribe({
           next: (res) => {
             Swal.fire({
-              title: 'you left the game.',
+              title: 'You left the game.',
               text: res.message,
               icon: 'info',
-              confirmButtonText: 'Aceptar',
+              confirmButtonText: 'Accept',
               background: '#0b0e23',
               color: '#fff'
             }).then(() => this.router.navigate(['/dashboard']));

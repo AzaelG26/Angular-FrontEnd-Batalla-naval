@@ -20,36 +20,17 @@
   </div>
 </div>
 
-<!-- Modal -->
-<div class="modal-backdrop" *ngIf="showModal">
-  <div class="modal">
-    <button class="close-btn" (click)="closeModal()">X</button>
+<app-statistics-modal
+  *ngIf="showModal"
+  [title]="modalContent === 'table' ? (selectedType === 'won' ? 'Partidas Ganadas' : 'Partidas Perdidas') : 'Último Movimiento'"
+  (close)="closeModal()"
+>
+  <ng-container *ngIf="modalContent === 'table'; else boardView">
+    <app-game-table [games]="gamesList" (view)="viewGame($event)" />
+  </ng-container>
 
-    <div *ngIf="modalContent === 'table'">
-      <h3>{{ selectedType === 'won' ? 'Partidas Ganadas' : 'Partidas Perdidas' }}</h3>
-      <table>
-        <thead>
-        <tr>
-          <th>Yo</th>
-          <th>Oponente</th>
-          <th>Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let game of gamesList">
-          <td>{{ game.me }}</td>
-          <td>{{ game.opponent }}</td>
-          <td><button (click)="viewGame(game)">Ver Tablero</button></td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div *ngIf="modalContent === 'board' && selectedGame">
-      <h3>Detalle del juego #{{ selectedGame.id }}</h3>
-      <!-- Aquí puedes renderizar un componente <app-game-board [game]="selectedGame"> o hacerlo inline -->
-      <pre>{{ selectedGame | json }}</pre>
-      <button (click)="modalContent = 'table'">Volver a tabla</button>
-    </div>
-  </div>
-</div>
+  <ng-template #boardView>
+    <app-game-board [game]="selectedGame" [meId]="meId" />
+    <button (click)="modalContent = 'table'">Volver a tabla</button>
+  </ng-template>
+</app-statistics-modal>

@@ -1,17 +1,25 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {GameService} from '../../services/game-service';
+import {StatisticsModal} from '../statistics-modal/statistics-modal';
+import {GameTableComponent} from '../game-table/game-table';
+import {GameBoardComponent} from '../game-board/game-board';
+import {AuthService} from '../../services/auth-service';
 
 @Component({
   selector: 'app-statistics',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,
+    StatisticsModal,
+    GameTableComponent,
+    GameBoardComponent],
   templateUrl: './statistics.html',
   styleUrls: ['./statistics.css']
 })
 export class StatisticsComponent {
   wins = 0;
   losses = 0;
+  meId = 0
 
   showModal = false;
   selectedType: 'won' | 'lost' | null = null;
@@ -20,15 +28,22 @@ export class StatisticsComponent {
   gamesList: any[] = [];
   selectedGame: any = null;
 
-  constructor(private gameService: GameService) {}
+  constructor(private gameService: GameService, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.gameService.getStats().subscribe({
-      next: (res: { wins: number; losses: number }) => {
-        this.wins = res.wins;
-        this.losses = res.losses;
+    this.authService.validateSession().subscribe({
+      next: (res) => {
+        this.meId = res.user.id;
+
+        this.gameService.getStats().subscribe({
+          next: (res: { wins: number; losses: number }) => {
+            this.wins = res.wins;
+            this.losses = res.losses;
+          },
+          error: (err: any) => console.error('Error loading stats:', err),
+        });
       },
-      error: (err: any) => console.error('Error loading stats:', err),
+      error: (err) => console.error('Error loading user session:', err),
     });
   }
 
@@ -62,6 +77,7 @@ export class StatisticsComponent {
   viewGame(game: any) {
     this.gameService.getGame(game.id).subscribe({
       next: (res: { game: any }) => {
+        console.log('Game loaded:', res.game);
         this.selectedGame = res.game;
         this.modalContent = 'board';
       },

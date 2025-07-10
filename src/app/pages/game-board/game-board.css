@@ -1,0 +1,12 @@
+.title {
+  @apply text-xl font-bold text-red-400 mb-4;
+}
+.grid-wrapper {
+  @apply overflow-x-auto rounded-lg bg-white/5 backdrop-blur-md p-2 shadow-lg border border-white/10;
+}
+.cell {
+  @apply w-10 h-10 border border-gray-600 flex items-center justify-center text-white text-sm;
+}
+.head {
+  @apply font-bold text-white/70 text-center;
+}

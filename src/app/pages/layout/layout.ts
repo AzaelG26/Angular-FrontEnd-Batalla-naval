@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, HostListener } from '@angular/core';
 import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import { AuthService } from '../../services/auth-service';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-dashboard',
   imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
@@ -10,7 +10,9 @@ import { AuthService } from '../../services/auth-service';
   styleUrl: './layout.css'
 })
 export class layoutComponent {
-  sidebarOpen = window.innerWidth >= 768; // visible en md+
+  sidebarOpen = window.innerWidth >= 768;
+
+  constructor(private authService: AuthService, private router: Router) {}
 
   toggleSidebar() {
     this.sidebarOpen = !this.sidebarOpen;
@@ -22,5 +24,19 @@ export class layoutComponent {
     if (width >= 768) {
       this.sidebarOpen = true;
     }
+  }
+
+  logout() {
+    this.authService.logout().subscribe({
+      next: () => {
+        localStorage.removeItem('token');
+        this.router.navigate(['/login']);
+      },
+      error: () => {
+        // fallback por si el backend no responde bien
+        localStorage.removeItem('token');
+        this.router.navigate(['/login']);
+      }
+    });
   }
 }

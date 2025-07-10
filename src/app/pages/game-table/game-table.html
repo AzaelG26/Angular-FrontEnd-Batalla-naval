@@ -1,0 +1,24 @@
+<table class="game-table">
+  <thead>
+  <tr>
+    <th>You</th>
+    <th>Opponent</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let game of games">
+    <td class="font-medium text-white/90">{{ game.me }}</td>
+    <td class="text-white/80">{{ game.opponent }}</td>
+    <td>
+      <button
+        (click)="view.emit(game)"
+        class="view-btn"
+        title="View board"
+      >
+        View Board
+      </button>
+    </td>
+  </tr>
+  </tbody>
+</table>
