@@ -1,1 +1,87 @@
-<p>game-view works!</p>
+<div class="px-4 py-8 max-w-7xl mx-auto text-white">
+  <h2 class="text-2xl font-bold mb-2">Game #{{ gameData?.id }}</h2>
+
+  <div class="text-center text-lg mb-4">
+    <span [ngClass]="isMyTurn ? 'text-green-400' : 'text-red-400'">
+      {{ isMyTurn ? "It's your turn" : "Not your turn" }}
+    </span>
+  </div>
+
+  <div *ngIf="error" class="text-red-500 text-sm text-center mb-4">{{ error }}</div>
+
+  <div class="grid md:grid-cols-2 gap-8">
+    <!-- Your board -->
+    <div>
+      <h3 class="text-lg font-semibold mb-4">Your board</h3>
+      <div class="overflow-x-auto">
+        <div class="grid grid-cols-[40px_repeat(8,40px)]">
+          <div></div>
+          <div *ngFor="let col of cols" class="text-center font-bold">{{ col }}</div>
+          <ng-container *ngFor="let row of rows">
+            <div class="text-center font-bold">{{ row }}</div>
+            <div *ngFor="let col of cols"
+                 class="w-10 h-10 border border-gray-500 flex items-center justify-center transition"
+                 [ngClass]="{
+                   'bg-red-500 text-white': myHitsReceived.includes(row + col),
+                   'bg-white text-black': !myHitsReceived.includes(row + col)
+                 }">
+              <span *ngIf="myGrid.includes(row + col)">🚢</span>
+              <span *ngIf="myHitsReceived.includes(row + col)">🔥</span>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <!-- Opponent's board -->
+    <div>
+      <h3 class="text-lg font-semibold mb-4">Opponent's board</h3>
+      <div class="overflow-x-auto">
+        <div class="grid grid-cols-[40px_repeat(8,40px)]">
+          <div></div>
+          <div *ngFor="let col of cols" class="text-center font-bold">{{ col }}</div>
+          <ng-container *ngFor="let row of rows">
+            <div class="text-center font-bold">{{ row }}</div>
+            <div *ngFor="let col of cols"
+                 class="w-10 h-10 border border-gray-600 flex items-center justify-center cursor-pointer transition"
+                 [ngClass]="{
+                   'bg-red-500': getMoveResult(row, col) === 'hit',
+                   'bg-blue-300': getMoveResult(row, col) === 'miss',
+                   'bg-gray-800 hover:bg-gray-700': getMoveResult(row, col) === null
+                 }"
+                 (click)="shootAt(row, col)">
+              <ng-container [ngSwitch]="getMoveResult(row, col)">
+                <span *ngSwitchCase="'hit'" class="text-white text-xl">🔥</span>
+                <span *ngSwitchCase="'miss'" class="text-white text-xl">💦</span>
+              </ng-container>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-8">
+    <button
+      (click)="leaveGame()"
+      class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-10V5m-6 6h.01" />
+      </svg>
+      Leave game
+    </button>
+  </div>
+
+  <div class="max-w-4xl mx-auto mt-8">
+    <h3 class="text-lg font-semibold mb-2">Movements</h3>
+    <ul class="list-disc list-inside text-white">
+      <li *ngFor="let move of gameData?.moves">
+        {{ move.user.name }} → {{ move.position }} — {{ move.result === 'hit' ? '¡Tocado!' : 'Agua' }}
+      </li>
+      <li *ngIf="gameData?.moves?.length === 0" class="text-gray-400">
+        No moves yet.
+      </li>
+    </ul>
+  </div>
+</div>

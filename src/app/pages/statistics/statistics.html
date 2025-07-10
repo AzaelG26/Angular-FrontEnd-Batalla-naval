@@ -1,0 +1,55 @@
+<div class="chart-wrapper">
+  <h2 class="chart-title">Game Statistics</h2>
+
+  <div class="chart">
+    <div
+      *ngFor="let item of data"
+      class="bar"
+      [style.height]="(item.value / maxValue * 100) + '%'"
+      [style.backgroundColor]="item.color"
+      (click)="item.value !== 0 ? open(item.label === 'Wins' ? 'won' : 'lost') : null"
+    >
+      <span class="bar-value">{{ item.value }}</span>
+    </div>
+  </div>
+
+  <div class="labels">
+    <div *ngFor="let item of data" class="label">
+      {{ item.label }}
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-backdrop" *ngIf="showModal">
+  <div class="modal">
+    <button class="close-btn" (click)="closeModal()">X</button>
+
+    <div *ngIf="modalContent === 'table'">
+      <h3>{{ selectedType === 'won' ? 'Partidas Ganadas' : 'Partidas Perdidas' }}</h3>
+      <table>
+        <thead>
+        <tr>
+          <th>Yo</th>
+          <th>Oponente</th>
+          <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let game of gamesList">
+          <td>{{ game.me }}</td>
+          <td>{{ game.opponent }}</td>
+          <td><button (click)="viewGame(game)">Ver Tablero</button></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="modalContent === 'board' && selectedGame">
+      <h3>Detalle del juego #{{ selectedGame.id }}</h3>
+      <!-- Aquí puedes renderizar un componente <app-game-board [game]="selectedGame"> o hacerlo inline -->
+      <pre>{{ selectedGame | json }}</pre>
+      <button (click)="modalContent = 'table'">Volver a tabla</button>
+    </div>
+  </div>
+</div>

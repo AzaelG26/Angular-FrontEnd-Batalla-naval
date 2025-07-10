@@ -14,19 +14,16 @@ import { Router } from '@angular/router';
   styleUrl: './dashboard.css'
 })
 export class DashboardComponent implements OnInit, OnDestroy {
- games: any[] = [];
+  games: any[] = [];
   currentUserId: number | null = null;
   loading = false;
   error = '';
   pollingSub?: Subscription;
-
   constructor(
     private gameService: GameService,
     private authService: AuthService,
     private router: Router
   ) {}
-
-
   ngOnInit(): void {
     this.authService.validateSession().subscribe({
       next: (res) => {

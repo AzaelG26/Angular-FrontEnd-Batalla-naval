@@ -17,9 +17,7 @@ export class GameCard {
   @Input() currentUserId!: number;
   @Output() join = new EventEmitter<number>();
   @Output() refresh = new EventEmitter<void>();
-  
-  constructor(private gameService: GameService) {}  
-
+  constructor(private gameService: GameService) {}
   get statusColor(): string {
     const status = this.game.status as GameStatus;
     const colors: Record<GameStatus, string> = {
@@ -39,16 +37,13 @@ export class GameCard {
     };
     return texts[status] || status;
   }
-
   get isCreator(): boolean {
     const creatorId = this.game.boards[0]?.user?.id;
     return this.currentUserId === creatorId;
   }
-
   joinGame() {
     this.join.emit(this.game.id);
   }
-
   cancelGame() {
     this.gameService.cancelGame(this.game.id).subscribe({
       next: () => this.refresh.emit(),
@@ -58,4 +53,3 @@ export class GameCard {
     });
   }
 }
-

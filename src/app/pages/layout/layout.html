@@ -10,18 +10,20 @@
       </h2>
       <nav class="space-y-4">
         <a
-          routerLink="/lobby"
+          routerLink="/dashboard"
           routerLinkActive="text-red-400"
+          [routerLinkActiveOptions]="{ exact: true }"
           class="flex items-center h-12 gap-2 px-3 py-2 hover:bg-red-700/30 transition"
         >
           <span>Lobby</span>
         </a>
         <a
-          routerLink="/profile"
+          routerLink="/dashboard/statistics"
           routerLinkActive="text-red-400"
+          [routerLinkActiveOptions]="{ exact: true }"
           class="flex items-center h-12 gap-2 px-3 py-2 hover:bg-red-700/30 transition"
         >
-          <span>Profile</span>
+          <span>Statistics</span>
         </a>
         <a
           routerLink="/settings"

@@ -6,7 +6,6 @@
       Status: <span [ngClass]="statusColor">{{ statusText }}</span>
     </p>
   </div>
-
   <div class="flex gap-2 mt-2 sm:mt-0">
     <button
         (click)="joinGame()"
@@ -15,7 +14,6 @@
         >
         Join
     </button>
-
     <button
       *ngIf="isCreator && game.status === 'waiting'"
       (click)="cancelGame()"
